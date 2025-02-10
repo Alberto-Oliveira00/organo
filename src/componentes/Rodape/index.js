@@ -5,13 +5,13 @@ const Rodape = () => {
         <section>
             <ul>
                 <li>
-                    <a href="facebook.com" target="_blank">
-                        <img src="./imagens/facebook.png" alt="" />
+                    <a href="https://www.instagram.com/bebeto_olv/?igsh=aDVnbWQyZm54NXBt&utm_source=qr" target="_blank" without rel='noreferrer' >
+                        <img src="imagens/ig.png" alt="" />
                     </a>
                 </li>
                 <li>
                     <a href="twitter.com" target="_blank">
-                        <img src="/imagens/twitter.png" alt="" />
+                        <img src="/imagens/tw.png" alt="" />
                     </a>
                 </li>
                 <li>
@@ -26,7 +26,7 @@ const Rodape = () => {
         </section>
         <section>
             <p>
-                Desenvolvido por Alura.
+                Desenvolvido por Alberto durante curso da Alura.
             </p>
         </section>
     </footer>)
