@@ -3,6 +3,7 @@ import Banner from "./componentes/Banner/Banner";
 import Formulario from "./componentes/Formulario";
 import Rodape from "./componentes/Rodape";
 import Time from "./componentes/Time";
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
 
