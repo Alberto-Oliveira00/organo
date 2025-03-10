@@ -56,7 +56,7 @@ const Formulario = ({aoCadastrar, times, cadastrarTime }) => {
                 evento.preventDefault()
                 cadastrarTime({nome: nomeTime, cor: corTime})
             }}>
-                <h2>Preencha os dados para criar un novo time.</h2>
+                <h2>Preencha os dados para criar um novo time.</h2>
                 <CampoTexto
                     obrigatorio
                     label='Nome'
