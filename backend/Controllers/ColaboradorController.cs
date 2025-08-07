@@ -2,11 +2,9 @@ using AutoMapper;
 using backend.Dtos;
 using backend.Models;
 using backend.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace MyApp.Namespace
+namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

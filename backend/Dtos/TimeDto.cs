@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using backend.Models;
 
 namespace backend.Dtos;
@@ -14,5 +15,6 @@ public class TimeDTO
     
     [StringLength(20)]
     public string? CorPadrao { get; set; }
+    [JsonIgnore]
     public ICollection<Colaborador>? Colaboradores { get; set; }
 }
