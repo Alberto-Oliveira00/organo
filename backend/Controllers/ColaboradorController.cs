@@ -12,22 +12,23 @@ namespace MyApp.Namespace
     [ApiController]
     public class ColaboradorController : ControllerBase
     {
-        private readonly AppDbContext _context;
         private readonly IColaboradorService _service;
         private readonly IMapper _mapper;
 
-        public ColaboradorController(AppDbContext context, IColaboradorService service, IMapper mapper)
+        public ColaboradorController(IColaboradorService service, IMapper mapper)
         {
-            _context = context;
             _service = service;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ColaboradorDTO>> GetColaboradorAsync()
+        public async Task<ActionResult<IEnumerable<ColaboradorDTO>>> GetColaboradorAsync()
         {
             var colaboradores = await _service.GetColaboradoresAsync();
-            return _mapper.Map<IEnumerable<ColaboradorDTO>>(colaboradores);
+            if (colaboradores == null || !colaboradores.Any())
+                return NotFound("Nenhum colaborador encontrado.");
+
+            return Ok(colaboradores);
         }
 
         [HttpPost]
@@ -47,13 +48,32 @@ namespace MyApp.Namespace
         public async Task<ActionResult<ColaboradorDTO>> Put(int id, ColaboradorDTO colaboradorDTO)
         {
             if (colaboradorDTO is null)
-            return StatusCode(500, $"Colaborador com id: {id} não existe.");
+                return StatusCode(500, $"Colaborador com id: {id} não existe.");
 
             var colaboradorEditado = await _service.UpdateColaboradorAsync(id, colaboradorDTO);
 
             var colaboradorEditadoDTO = _mapper.Map<ColaboradorDTO>(colaboradorEditado);
 
             return Ok(colaboradorEditadoDTO);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<ColaboradorDTO>> DeleteColaborador(int id)
+        {
+            try
+            {
+                var colaborador = await _service.DeleteColaboradorAsync(id);
+
+                return Ok($"Colaborador de id: {id} deletado com sucesso");
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Erro ao excluir colaborador.");
+            }
         }
     }
 }

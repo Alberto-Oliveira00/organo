@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gZdEkWzUCVg=",
+  "dgSpecHash": "P5I88R17aO0=",
   "success": true,
-  "projectFilePath": "E:\\projetos\\organo\\backend\\backend.csproj",
+  "projectFilePath": "E:\\projetos\\organo-fullstack\\backend\\backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\b-ebe\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\b-ebe\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

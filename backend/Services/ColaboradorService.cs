@@ -17,14 +17,12 @@ public class ColaboradorService : IColaboradorService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<Colaborador>> GetColaboradoresAsync()
+    public async Task<IEnumerable<ColaboradorDTO>> GetColaboradoresAsync()
     {
         var colaboradores = await _context.Colaboradores.Include(c => c.Time).AsNoTracking().ToListAsync();
 
-        if (colaboradores is null)
-            throw new ApplicationException("Colaboradores não encontrados");
-
-        return colaboradores;
+        var colaboradoresDTO = _mapper.Map<IEnumerable<ColaboradorDTO>>(colaboradores);
+        return colaboradoresDTO;
     }
 
     public async Task<Colaborador> CreateColaboradorAsync(ColaboradorDTO colaboradorDTO)
@@ -65,10 +63,9 @@ public class ColaboradorService : IColaboradorService
     {
         var colaborador = await _context.Colaboradores.FirstOrDefaultAsync(c => c.ColaboradorID == id);
         if (colaborador is null)
-            throw new ArgumentException($"Time com {id} não existe.");
+            throw new ArgumentException($"Colaborador com {id} não existe.");
 
         _context.Colaboradores.Remove(colaborador);
-
         await _context.SaveChangesAsync();
 
         return _mapper.Map<ColaboradorDTO>(colaborador);

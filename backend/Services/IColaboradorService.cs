@@ -5,7 +5,7 @@ namespace backend.Services;
 
 public interface IColaboradorService
 {
-    Task<IEnumerable<Colaborador>> GetColaboradoresAsync();
+    Task<IEnumerable<ColaboradorDTO>> GetColaboradoresAsync();
     Task<Colaborador> CreateColaboradorAsync(ColaboradorDTO colaboradorDTO);
     Task<ColaboradorDTO> UpdateColaboradorAsync(int id, ColaboradorDTO colaboradorDTO);
     Task<ColaboradorDTO> DeleteColaboradorAsync(int id);
