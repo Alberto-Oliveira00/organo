@@ -22,13 +22,28 @@ public class TimeService : ITimeService
         var timesDto = _mapper.Map<IEnumerable<TimeDTO>>(times);
         return timesDto;
     }
-    public Task<TimeDTO> CreateTimeAsync(TimeDTO timeDTO)
+    public async Task<TimeDTO> CreateTimeAsync(TimeDTO timeDTO)
     {
-        throw new NotImplementedException();
+        var novoTime = _mapper.Map<Time>(timeDTO);
+
+        _context.Times.Add(novoTime);
+        await _context.SaveChangesAsync();
+
+        var timeDto = _mapper.Map<TimeDTO>(novoTime);
+        return timeDto;        
     }
-    public Task<TimeDTO> UpdateTimeAsync(int id, TimeDTO timeDTO)
+    public async Task<TimeDTO> UpdateTimeAsync(int id, TimeDTO timeDTO)
     {
-        throw new NotImplementedException();
+        var time = await _context.Times.FirstOrDefaultAsync(t => t.TimeID == id);
+        if (time is null)
+            return null;
+
+        _mapper.Map(timeDTO, time);
+
+        await _context.SaveChangesAsync();
+
+        var timeDto = _mapper.Map<TimeDTO>(time);
+        return timeDto;
     }
     public Task<TimeDTO> DeleteTimeAsync(int id)
     {

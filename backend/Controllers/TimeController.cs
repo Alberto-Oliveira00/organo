@@ -30,4 +30,28 @@ public class TimeController : ControllerBase
 
         return Ok(timesDto);
     }
+
+    [HttpPost]
+    public async Task<ActionResult<TimeDTO>> PostAsync(TimeDTO timeDTO)
+    {
+        var time = await _service.CreateTimeAsync(timeDTO);
+
+        var timeDto = _mapper.Map<TimeDTO>(time);
+
+        return Ok(timeDto);
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<TimeDTO>> PutAsync(int id, TimeDTO timeDTO)
+    {
+        if (id != timeDTO.TimeID)
+        return BadRequest("ID do time na URL difere do corpo da requisição.");
+
+        var time = await _service.UpdateTimeAsync(id, timeDTO);
+        
+        if (time is null)
+            return BadRequest($"Time de id: {id} não encontrado");
+
+        return Ok(time);
+    }
 }
