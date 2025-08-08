@@ -45,12 +45,22 @@ public class TimeController : ControllerBase
     public async Task<ActionResult<TimeDTO>> PutAsync(int id, TimeDTO timeDTO)
     {
         if (id != timeDTO.TimeID)
-        return BadRequest("ID do time na URL difere do corpo da requisição.");
+            return BadRequest("ID do time na URL difere do corpo da requisição.");
 
         var time = await _service.UpdateTimeAsync(id, timeDTO);
-        
+
         if (time is null)
             return BadRequest($"Time de id: {id} não encontrado");
+
+        return Ok(time);
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult<TimeDTO>> DeleteAsync(int id)
+    {
+        var time = await _service.DeleteTimeAsync(id);
+        if (time is null)
+            return BadRequest($"Time de id: {id} não encontrado.");
 
         return Ok(time);
     }

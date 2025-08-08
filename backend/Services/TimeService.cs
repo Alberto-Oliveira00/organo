@@ -45,8 +45,15 @@ public class TimeService : ITimeService
         var timeDto = _mapper.Map<TimeDTO>(time);
         return timeDto;
     }
-    public Task<TimeDTO> DeleteTimeAsync(int id)
+    public async Task<TimeDTO> DeleteTimeAsync(int id)
     {
-        throw new NotImplementedException();
+        var time = await _context.Times.FirstOrDefaultAsync(t => t.TimeID == id);
+        if (time is null)
+            return null;
+
+        _context.Remove(time);
+        await _context.SaveChangesAsync();
+
+        return _mapper.Map<TimeDTO>(time);
     }
 }
