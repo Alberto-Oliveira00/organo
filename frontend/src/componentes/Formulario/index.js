@@ -9,20 +9,82 @@ const Formulario = ({aoCadastrar, times, cadastrarTime }) => {
     const [nome, setNome] = useState('')
     const [cargo, setCargo] = useState('')
     const [imagem, setImagem] = useState('')
-    const [time, setTime] = useState('')
+    const [timeId, setTimeId] = useState('')
     const [nomeTime, setNomeTime] = useState('')
     const [corTime, setCorTime] = useState('')
 
-    const aoSubmeter = (evento) => {
+    const aoSubmeter = async (evento) => {
         evento.preventDefault()
-        console.log('form enviado', nome, cargo, imagem, time )
-        aoCadastrar({
+        
+        if (!timeId) {
+            alert('Selecione um time')
+            return
+        }
+
+        const colaborador = {
             nome,
             cargo,
             imagem,
-            time
-        })
-    }
+            timeID: Number(timeId),
+        }
+
+        try {
+            const response = await fetch("http://localhost:5146/api/colaborador", {
+                method: "POST",
+                headers: { "Content-Type":"application/json" },
+                body: JSON.stringify(colaborador)
+            });
+
+            if(!response.ok){
+                const erroTexto = await response.text();
+                throw new Error(`Erro ao cadastrar colaborador: ${erroTexto}`);
+            }
+
+
+            const colaboradorCriado = await response.json();
+            aoCadastrar(colaboradorCriado);
+
+            setNome('');
+            setCargo('');
+            setImagem('');
+            setTimeId('');
+
+        } catch (error) {
+            console.log(error);
+            alert("Falha ao cadastrar colaborador");
+        }
+    };
+
+    const aoCriarTime = async (evento) => {
+        evento.preventDefault();
+
+        const novoTime = {
+            nomeTime: nomeTime,
+            corPadrao: corTime,
+        };
+
+        try {
+            const response = await fetch("http://localhost:5146/api/time", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(novoTime)
+            });
+
+            if(!response.ok){
+                throw new Error("Erro ao cadastrar time");
+            }
+
+            const timeCriado = await response.json();
+            cadastrarTime(timeCriado);
+
+            setNomeTime('');
+            setCorTime('');
+            
+        } catch (error) {
+            console.error(error);
+            alert("Falha ao cadastrar time");
+        }
+    };
 
     return (
         <section className="formulario-container">
@@ -33,7 +95,7 @@ const Formulario = ({aoCadastrar, times, cadastrarTime }) => {
                     label='Nome'
                     placeholder='Digite seu nome '
                     valor={nome}
-                    aoAlterado={valor => setNome(valor)}/>
+                    aoAlterado={(valor) => setNome(valor)}/>
                 <Campo
                     obrigatorio={true}
                     label='Cargo' 
@@ -43,26 +105,25 @@ const Formulario = ({aoCadastrar, times, cadastrarTime }) => {
                 <Campo 
                     label='Imagem' 
                     placeholder='Informe o endereço da imagem '
-                    aoAlterado={valor => setImagem(valor)}/>
+                    aoAlterado={(valor) => setImagem(valor)}/>
                 <ListaSuspensa 
                     obrigatorio={true}
                     label='Times'
-                    items={times} 
-                    valor={time}
-                    aoAlterado={valor => setTime(valor)}/>
+                    items={times.map(time => ({timeID: time.id, nomeTime: time.nome}))} 
+                    valor={timeId}
+                    aoAlterado={setTimeId}
+                />
                 <Botao texto='Criar card' />
             </form>
-            <form className="formulario" onSubmit={(evento) => {
-                evento.preventDefault()
-                cadastrarTime({nome: nomeTime, cor: corTime})
-            }}>
+
+            <form className="formulario" onSubmit={aoCriarTime}>
                 <h2>Preencha os dados para criar um novo time.</h2>
                 <Campo
                     obrigatorio
                     label='Nome'
                     placeholder='Digite o nome do time'
                     valor={nomeTime}
-                    aoAlterado={valor => setNomeTime(valor)}
+                    aoAlterado={(valor) => setNomeTime(valor)}
                 />
                 <Campo
                     obrigatorio
